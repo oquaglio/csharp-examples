@@ -8,33 +8,37 @@ public class AsyncDemo
     // Async Main method (supported in C# 7.1+)
     static async Task Main(string[] args)
     {
-        Console.WriteLine("Starting async operations...");
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Starting async operations...");
 
         // Start multiple async tasks concurrently
         Task<string> task1 = FetchDataAsync("https://example.com/api/data1");  // Simulated API call
         Task<string> task2 = FetchDataAsync("https://example.com/api/data2");
 
+        // Progresses immidiately to here without waiting for tasks to complete
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Async tasks started");
+
         // Await both tasks (non-blocking)
-        string result1 = await task1;
-        string result2 = await task2;
+        string result1 = await task1; // The main thread pauses here until task1 completes
+        string result2 = await task2; // The main thread pauses here until task2 completes
 
-        Console.WriteLine("Results:");
-        Console.WriteLine(result1);
-        Console.WriteLine(result2);
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Results:");
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {result1}");
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {result2}");
 
-        // Use Task.WhenAll for parallelism
+        // Start two new async operations; both run in parallel
+        // Wait for both to complete (await)
         string[] results = await Task.WhenAll(
             FetchDataAsync("https://example.com/api/data3"),
             FetchDataAsync("https://example.com/api/data4")
         );
 
-        Console.WriteLine("Parallel results:");
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - Parallel results:");
         foreach (var result in results)
         {
-            Console.WriteLine(result);
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {result}");
         }
 
-        Console.WriteLine("All operations completed.");
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - All operations completed.");
         Console.ReadKey();
     }
 
@@ -53,7 +57,7 @@ public class AsyncDemo
                 // return response;
 
                 // Simulated response
-                return $"Data from {url} fetched asynchronously at {DateTime.Now}";
+                return $"Data from {url} fetched asynchronously at {DateTime.Now:HH:mm:ss.fff}";
             }
             catch (Exception ex)
             {
