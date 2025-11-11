@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQDemo", "LINQDemo\LINQDe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIDemo", "DIDemo\DIDemo.csproj", "{0BBACDD4-1DAF-4CB7-838B-A288EE0A1A1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallbackDemo", "CallbackDemo\CallbackDemo.csproj", "{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{0BBACDD4-1DAF-4CB7-838B-A288EE0A1A1C}.Release|x64.Build.0 = Release|Any CPU
 		{0BBACDD4-1DAF-4CB7-838B-A288EE0A1A1C}.Release|x86.ActiveCfg = Release|Any CPU
 		{0BBACDD4-1DAF-4CB7-838B-A288EE0A1A1C}.Release|x86.Build.0 = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|x64.Build.0 = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Debug|x86.Build.0 = Debug|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|x64.ActiveCfg = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|x64.Build.0 = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|x86.ActiveCfg = Release|Any CPU
+		{07AEE594-6B23-4756-AC93-B3CFBAD27ECA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
