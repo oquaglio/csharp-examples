@@ -18,8 +18,11 @@ namespace AsyncCallbackDemo
             // Task.Run(                     // ← Schedule work on the ThreadPool (the lambda) - picked up by a background thread
             //     async () => { ... }       // ← This is an async lambda (returns a completed Task)
             // );
-            Task.Run(async () => // call static method Task.Run to run the callback (the lambda) on a background thread
-                                 // creates a Task object to represent the work
+            //Task.Run(async () => // call static method Task.Run to run the callback (the lambda) on a background thread
+            // creates a Task object to represent the work
+            // Normally, we'd just defined Task.Run() as above, but to show the inner workings better let's capture the Task object and
+            // do some extrta logging about it:
+            var backgroundTask = Task.Run(async () =>
             {
                 await Task.Delay(800);
                 Console.WriteLine("[Library] → Event 1: \"UserLoggedIn\"");
@@ -39,6 +42,28 @@ namespace AsyncCallbackDemo
                 await Task.Delay(500);
                 Console.WriteLine("[Library] → Event 3: \"MessageReceived\"");
                 await callback("MessageReceived");
+            });
+
+            // LOG EVERYTHING ABOUT THE TASK OBJECT!
+            Console.WriteLine($"[Library] Task.Run just created a REAL Task object:");
+            Console.WriteLine($"   → Task ID          : {backgroundTask.Id}");
+            Console.WriteLine($"   → Task Status      : {backgroundTask.Status}");
+            Console.WriteLine($"   → IsCompleted      : {backgroundTask.IsCompleted}");
+            Console.WriteLine($"   → IsFaulted        : {backgroundTask.IsFaulted}");
+            Console.WriteLine($"   → Creation Thread  : {Environment.CurrentManagedThreadId}");
+            Console.WriteLine($"   → Task Type        : {backgroundTask.GetType().Name}");
+            Console.WriteLine($"   → AsyncState       : {backgroundTask.AsyncState ?? "null"}");
+            Console.WriteLine($"   → ReferenceEquals(Task.CompletedTask, backgroundTask) : {ReferenceEquals(Task.CompletedTask, backgroundTask)}");
+            Console.WriteLine();
+
+            // Define a lambda function to run when the background task completes
+            backgroundTask.ContinueWith(t =>
+            {
+                Console.WriteLine("\n[Library] Background task FINISHED!");
+                Console.WriteLine($"Task {t.Id} is now: {t.Status}");
+                Console.WriteLine($"   → Final Status   : {t.Status}");
+                Console.WriteLine($"   → IsCompleted    : {t.IsCompleted}");
+                Console.WriteLine($"   → Exception      : {t.Exception?.GetBaseException().Message ?? "none"}");
             });
         }
     }
