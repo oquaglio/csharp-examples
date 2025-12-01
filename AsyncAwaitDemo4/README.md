@@ -20,3 +20,25 @@
 | Manual error handling         | Normal `try`/`catch` – just works                  |
 | No built-in cancellation      | `CancellationToken` supported everywhere           |
 | No progress
+
+
+## Fire and Forget Pattern
+
+```chsarp
+_ = Task.Run(...)   // "Go do this in the background. I don't care when it finishes."
+```
+
+If you’re paranoid about exceptions being silently lost you can do somthing like this:
+```chsarp
+static void FireAndForget(Task task)
+{
+    task.ContinueWith(t =>
+    {
+        if (t.IsFaulted)
+            Console.WriteLine($"Fire-and-forget task failed: {t.Exception?.Flatten()}");
+    }, TaskScheduler.Default);
+}
+
+// Usage:
+FireAndForget(Task.Run(() => { ... }));
+```
