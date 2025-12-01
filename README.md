@@ -8,7 +8,6 @@ To get these working in VSCode, just install the extension "C# Dev Kit" and a do
 ## Build
 
 You can build everything together:
-
 ```SH
 dotnet build CSharpExamples.sln
 ```
