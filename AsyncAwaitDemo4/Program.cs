@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AsyncAwaitDemo4
+namespace AsyncAwaitRealWorldFeatures
 {
     class Program
     {
@@ -18,11 +18,11 @@ namespace AsyncAwaitDemo4
                 Console.WriteLine($"[Progress] {percent}% completed"));
 
             // Start a cancellable operation with progress reporting
-            Console.WriteLine("Starting 5 fake website downloads in parallel...");
+            Console.WriteLine("Starting 5 website downloads in parallel...");
             Console.WriteLine("Press 'c' + Enter to cancel\n");
 
-            // Start a background task that listens for 'c' key
-            var cancelTask = Task.Run(() =>
+            // Background task to listen for cancel input
+            _ = Task.Run(() =>
             {
                 Console.WriteLine("Type 'c' and press Enter to cancel...");
                 if (Console.ReadLine()?.Trim().ToLower() == "c")
@@ -32,13 +32,24 @@ namespace AsyncAwaitDemo4
             try
             {
                 string[] results = await DownloadMultipleSitesAsync(
-                    new[] { "https://dotnet.microsoft.com", "https://github.com", "https://stackoverflow.com", "https://news.ycombinator.com", "https://reddit.com" },
+                    [
+                        "https://dotnet.microsoft.com",
+                        "https://github.com",
+                        "https://stackoverflow.com",
+                        "https://news.ycombinator.com",
+                        "https://reddit.com"
+                    ],
                     progress,
                     cts.Token);
 
-                Console.WriteLine($"\nAll done! Downloaded {results.Length} pages.");
-                foreach (var (url, length) in results)
-                    Console.WriteLine($"  {url} → {length / 1024} KB");
+                Console.WriteLine($"\nAll done! Downloaded {results.Length} pages:");
+                foreach (var item in results)
+                {
+                    var parts = item.Split('|');
+                    string url = parts[0];
+                    int bytes = int.Parse(parts[1]);
+                    Console.WriteLine($"  {url} → {bytes / 1024} KB");
+                }
             }
             catch (OperationCanceledException)
             {
@@ -62,8 +73,8 @@ namespace AsyncAwaitDemo4
 
             for (int i = 0; i < urls.Length; i++)
             {
-                int index = i; // capture for closure
-                tasks[i] = DownloadSiteAsync(urls[index], ct);
+                int index = i;
+                tasks[index] = DownloadSiteAsync(urls[index], ct);
             }
 
             // This is the magic: run ALL downloads in parallel!
@@ -71,19 +82,21 @@ namespace AsyncAwaitDemo4
 
             // Report final progress
             progress?.Report(100);
-
             return results;
         }
 
         static async Task<string> DownloadSiteAsync(string url, CancellationToken ct)
         {
-            Console.WriteLine($"[{Task.CurrentId}] Starting download: {url}");
+            Console.WriteLine($"[Task {Task.CurrentId}] Downloading {url}");
 
-            // Real async I/O — never blocks a thread
-            using var response = await httpClient.GetAsync(url, ct).ConfigureAwait(false);
+            using var response = await httpClient.GetAsync(url, ct)
+                .ConfigureAwait(false);
+
             response.EnsureSuccessStatusCode();
+            string content = await response.Content.ReadAsStringAsync(ct)
+                .ConfigureAwait(false);
 
-            string content = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            Console.WriteLine($"[Task {Task.CurrentId}] Completed {url} ({content.Length / 1024} KB)");
 
             Console.WriteLine($"[{Task.CurrentId}] Finished: {url} ({content.Length / 1024} KB)");
 
