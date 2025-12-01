@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AsyncFireAndForgetDemo
+namespace AsyncAwaitDemo3
 {
     public class LongRunningTask
     {

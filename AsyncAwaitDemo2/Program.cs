@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AsyncAwaitTrueNonBlockingDemo
+namespace AsyncAwaitDemo2
 {
     public class LongRunningTask
     {
